@@ -1,0 +1,17 @@
+{
+    "enabled": true,
+    "dev": false,
+    "inventoryRate": 1,
+    "slowInventoryRate": 10,
+    "scanRate": 10,
+    "slowScanRate": 60,
+    "callRate": 10,
+    "slowCallRate": 60,
+    "feedRate": 10,
+    "slowFeedRate": 70,
+    "xpCleanupInterval": 20,
+    "breedingRange": 10,
+    "troughRange": 2,
+    "entityCap": 32,
+    "troughBreedingChance": 0.8
+}

@@ -1,0 +1,8 @@
+{
+  "type": "java",
+  "source": "java",
+  "directory": "quark-native",
+  "source-dirs": ["src"],
+  "library-dirs": [],
+  "boot-classes": ["com.quark.baseautomation.nativebridge.QuarkNative"]
+}

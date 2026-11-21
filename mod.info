@@ -1,0 +1,6 @@
+{
+  "name": "Quark base automation",
+  "author": "pupedo",
+  "version": "0.4.0",
+  "description": "Bedrock port of the Java mod Quark. Features:\n  - Chute\n  - Feeding Trough"
+}

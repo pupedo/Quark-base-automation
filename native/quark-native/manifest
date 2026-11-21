@@ -1,0 +1,10 @@
+{
+  "shared": {
+    "name": "quark-native",
+    "include": []
+  },
+  "depends": [
+    "innercore",
+    "nativejs"
+  ]
+}
