@@ -95,24 +95,29 @@ function readBreedingState(uid, type) {
 
 function applyInLove(uid) {
     if (QUARK_IS_64_BIT) {
-        return !!QuarkNative.setInLove(uid);
+        var ok = !!QuarkNative.setInLove(uid);
+        QuarkNative.setPersistent(uid);
+        return ok;
     }
     var nbtData = Entity.getCompoundTag(uid);
     nbtData.putInt("InLove", IN_LOVE_DURATION);
+    nbtData.putByte("Persistent", 1);
     Entity.setCompoundTag(uid, nbtData);
-    debugLog_breed("set InLove (no LoveCause) on entity=" + uid);
+    debugLog_breed("set InLove + Persistent on entity=" + uid);
     return true;
 }
 
 function applyBreedCooldown(uid, ticks) {
     if (QUARK_IS_64_BIT) {
         QuarkNative.setBreedCooldown(uid, ticks);
+        QuarkNative.setPersistent(uid);
         return;
     }
     var nbtData = Entity.getCompoundTag(uid);
     nbtData.putInt("BreedCooldown", ticks);
+    nbtData.putByte("Persistent", 1);
     Entity.setCompoundTag(uid, nbtData);
-    debugLog_breed("set BreedCooldown=" + ticks + " on entity=" + uid);
+    debugLog_breed("set BreedCooldown + Persistent=" + ticks + " on entity=" + uid);
 }
 
 function moveToTargetCoords(entityList, targetX, targetY, targetZ, dim) {

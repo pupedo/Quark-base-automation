@@ -24,3 +24,4 @@ function debugLog_chute(msg) {
     if (!DEBUG) return;
     Logger.Log("[CHUTE] " + msg, "Quark");
 }
+

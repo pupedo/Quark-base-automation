@@ -11,12 +11,16 @@ typedef void* (*OwnerGetStackRefFn)(void*);
 typedef void* (*StackRefEnttRegistryFn)(void*);
 typedef void* (*RegistryAssureBreedableFn)(void*);
 typedef void (*BreedableSetInLoveFn)(void*, void*, void*);
+typedef bool (*IsPersistentFn)(void*);
+typedef void (*AddPersistentFn)(void*);
 
 static ActorWrapFn g_wrap = 0;
 static OwnerGetStackRefFn g_getStackRef = 0;
 static StackRefEnttRegistryFn g_enttRegistry = 0;
 static RegistryAssureBreedableFn g_assureBreedable = 0;
 static BreedableSetInLoveFn g_compSetInLove = 0;
+static IsPersistentFn g_isPersistent = 0;
+static AddPersistentFn g_addPersistent = 0;
 static int g_resolveState = 0;
 
 static void resolveSymbols() {
@@ -34,6 +38,12 @@ static void resolveSymbols() {
         false);
     g_compSetInLove = (BreedableSetInLoveFn) hz_get_symbol(
         "mcpe", "_ZN18BreedableComponent9setInLoveER5ActorPK6Player", false);
+    g_isPersistent = (IsPersistentFn) hz_get_symbol(
+        "mcpe", "_ZNK5Actor12isPersistentEv", false);
+    g_addPersistent = (AddPersistentFn) hz_get_symbol(
+        "mcpe",
+        "_ZN17EntityContextBase12addComponentI18ActorFlagComponentI14PersistentFlagEJEEERT_DpOT0_",
+        false);
     g_resolveState = (g_wrap && g_getStackRef && g_enttRegistry && g_assureBreedable && g_compSetInLove) ? 1 : -1;
 }
 
@@ -84,6 +94,20 @@ Java_com_quark_baseautomation_nativebridge_QuarkNative_setBreedCooldown(
     if (ticks < 0) ticks = 0;
     *(int*)((char*) comp + 0xc) = (int) ticks;
     return JNI_TRUE;
+}
+
+extern "C" JNIEXPORT jboolean JNICALL
+Java_com_quark_baseautomation_nativebridge_QuarkNative_setPersistent(
+        JNIEnv*, jclass, jlong uid) {
+    resolveSymbols();
+    if (g_resolveState != 1 || !g_isPersistent || !g_addPersistent) return JNI_FALSE;
+    void* actor = g_wrap((long long) uid);
+    if (!actor) return JNI_FALSE;
+    if (g_isPersistent(actor)) return JNI_TRUE;
+    void* ref = g_getStackRef((char*) actor + 0x8);
+    if (!ref) return JNI_FALSE;
+    g_addPersistent(ref);
+    return g_isPersistent(actor) ? JNI_TRUE : JNI_FALSE;
 }
 
 extern "C" __attribute__((visibility("default"))) int JNI_OnLoad(JavaVM*, void*) {

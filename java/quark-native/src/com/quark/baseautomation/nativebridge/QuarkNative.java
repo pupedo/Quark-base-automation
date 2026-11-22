@@ -9,6 +9,8 @@ public final class QuarkNative {
 
     public static native boolean setBreedCooldown(long entityUid, int ticks);
 
+    public static native boolean setPersistent(long entityUid);
+
     public static void boot(HashMap<?, ?> map) {
     }
 }
