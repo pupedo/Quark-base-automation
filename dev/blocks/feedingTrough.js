@@ -156,6 +156,9 @@ function feedRateForMode(mode) {
 function setMode(tile, next) {
     if (tile._mode === next) return false;
     tile._mode = next;
+    if (DEBUG) {
+        Game.message("Feeding Trough " + tile.x + "," + tile.y + "," + tile.z + ": " + next);
+    }
     if (next === "ACTIVE") {
         tile._inventoryCooldown = 0;
         tile._callCooldown = 0;
@@ -365,6 +368,9 @@ TileEntity.registerPrototype(BlockID.feedingTroughBlock, {
 
     init: function () {
         this._mode = "INACTIVE";
+        if (DEBUG) {
+            Game.message("Feeding Trough " + this.x + "," + this.y + "," + this.z + ": INACTIVE");
+        }
         this._inventoryCooldown = 0;
         this._scanCooldown = 0;
         this._callCooldown = 0;
